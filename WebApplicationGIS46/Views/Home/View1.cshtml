@@ -1,0 +1,36 @@
+﻿<h1>Hello From First View :)</h1>
+
+<style>
+h1{
+    background-color:yellow;
+    color:red;
+}
+</style>
+<script>
+console.log("hwello");
+</script>
+<!--Razor syntax understand with razor engin (server side )-->
+<!--Block of code C#-->
+@{
+    int x=10;
+    int y = x+10;
+    <p>hii from block of code</p>
+}
+<!--inline of code REturn value to render-->
+<h2>@(x+y)</h2>
+<!--condition statment (if ,if-else , switch-->
+@if (x > y){
+    <h2>x greater than y</h2>
+}
+else
+{
+    <h2>x =@x less than y=@y</h2>
+}
+
+<!--Iteration (loopiong statment) for ,wgile ,do while,forach-->
+<select class="form form-control">
+    @for(int i = 0; i < 10; i++)
+    {
+        <option>@i</option>
+    }
+</select>
