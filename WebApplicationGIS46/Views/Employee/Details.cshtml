@@ -1,0 +1,36 @@
+﻿@model Employee
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+<h2 style="color:@ViewData["color"]">@Model.Name</h2>
+<h2 style="color:@ViewBag.color">@Model.Name</h2>
+@Model.
+<hr />
+<h3>@ViewData["MSG"]</h3>
+<h3>@ViewBag.MSG</h3>
+<hr />
+<h3>@(int.Parse(ViewData["Temp"].ToString())+20)</h3>
+<h3>@(ViewBag.Temp+20)</h3>
+<hr />
+<select class="form form-control">
+    @foreach (var item in (List<string>)ViewData["DeptList"])
+    {
+        <option>@item</option>
+    }
+</select>
+<select class="form form-control">
+    @foreach (var item in ViewBag.DeptList)
+    {
+        <option>@item</option>
+    }
+</select>
+<!--ViewData
+    1)Magic string "KEy"
+    2)unboxing "Explicit type cast"
+    //--------------------------
+    ViewBag 
+    1)Magix string
+    2) Casting runtime ==>exception
+-->

@@ -1,0 +1,21 @@
+﻿@model EmpWithMsgTempDeptListColorViewModel 
+
+
+@* @using WebApplicationGIS46.ViewModel
+@model EmpWithMsgTempDeptListColorViewModel *@
+
+@* @model WebApplicationGIS46.ViewModel.EmpWithMsgTempDeptListColorViewModel *@
+@{
+    ViewData["Title"] = "DetailsVM";
+}
+
+<h1>DetailsVM</h1>
+<h2 style="color:@Model.Color">@Model.EmpName</h2>
+<h3>@(Model.Temp+10)</h3>
+<select class="form form-control">
+    @foreach (var item in Model.Departments)
+    {
+    <option>@item</option>
+        
+    }
+</select>
