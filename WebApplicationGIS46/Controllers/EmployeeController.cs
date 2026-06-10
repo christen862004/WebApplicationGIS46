@@ -13,6 +13,26 @@ namespace WebApplicationGIS46.Controllers
             return View("Index", context.Employees.ToList());
         }
 
+        #region NEw
+        public IActionResult New()
+        {
+            ViewData["DeptList"] = context.Departments.ToList();
+            return View("New");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]//request.key["_vertoo"]
+        public IActionResult SaveNew(Employee empFromRequest)
+        {
+            if(empFromRequest.Name != null&& empFromRequest.Salary>7000) {
+                context.Employees.Add(empFromRequest);
+                context.SaveChanges();
+                return RedirectToAction("Index", "Employee");
+            }
+            ViewData["DeptList"] = context.Departments.ToList();
+            return View("New", empFromRequest);
+        }
+        #endregion
+
         #region Edit
         public IActionResult Edit(int id)
         {
@@ -62,7 +82,7 @@ namespace WebApplicationGIS46.Controllers
         #endregion
 
         #region DEtails
-        public IActionResult Details(int id)
+        public IActionResult Details(int id,string name)
         {
             string msg = "hello";
             List<string> DeptList=context.Departments.Select(x => x.Name).ToList();

@@ -8,12 +8,21 @@
 <form method="post" action="/Employee/SaveEdit/@Model.Id">
    @*  <input type="hidden" name="id" value="@Model.Id" /> *@
    <div>
-        <label>Name</label>
-        <input type="text" class="form form-control" name="EmpName" id="EmpName" value="@Model.EmpName" />
+        @*<label>Name</label>
+         <input type="text" class="form form-control" name="EmpName" id="EmpName" value="@Model.EmpName" /> *@
+        <!--Html Helper-->
+        @* @Html.TextBox("EmpName123") *@
+        @* @Html.LabelFor(e=>e.EmpName) *@
+        @* @Html.TextBoxFor(expression: e => e.EmpName, htmlAttributes: new { style = "color:red",@class="form form-control"}) *@
+        @* @Html.EditorFor(e=>e.EmpName) *@
+        <!--Tag helper-->
+        <label asp-for="EmpName"></label>
+        <input class="form form-control" asp-for="EmpName"  />
    </div>
     <div>
         <label>Salary</label>
         <input type="number" class="form form-control" name="EmpSalary" id="EmpSalary" value="@Model.EmpSalary" />
+        
     </div>
     <div>
         <label>ImageURL</label>
@@ -42,4 +51,16 @@
    <input type="submit" class="btn btn-danger" value="Save" />
    <br />
 </form>
+<!---->
 <a href="/Employee/Index">Back To List</a>
+@Html.ActionLink(linkText: "Back To List",actionName:"Index",controllerName:"Employee")
+<a class="btn btn-primary" asp-action="Index" asp-controller="Employee">Back toList</a>
+<hr />
+<a href="/Employee/Details/@Model.Id?name=@Model.EmpName" class="btn btn-success">Details</a>
+
+@Html.ActionLink(linkText:"Show Deatils",actionName:"Details"
+        ,controllerName:"Employee",routeValues:new{id=Model.Id,name=@Model.EmpName},htmlAttributes:new{@class="btn btn-success"})
+
+<a class="btn btn-success" asp-action="Details" asp-controller="Employee" 
+asp-route-id="@Model.Id"
+asp-route-name="@Model.EmpName" asp-route-age="12">Details</a>
