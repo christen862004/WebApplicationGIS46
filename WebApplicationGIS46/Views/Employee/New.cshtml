@@ -8,17 +8,23 @@
 
 @* asp-route-id="@Model.Id" *@
 <form method="post" asp-action="SaveNew" asp-controller="Employee" >
+    <div asp-validation-summary="All" class="text-danger"></div>
     <div>
         <label asp-for="Name"></label>
         <input asp-for="Name" class="form form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
     </div>
     <div>
         <label asp-for="Salary"></label>
         <input asp-for="Salary" class="form form-control" />
+        <span asp-validation-for="Salary" class="text-danger"></span>
+
     </div>
     <div>
         <label asp-for="ImageURL"></label>
         <input asp-for="ImageURL" class="form form-control" />
+        <span asp-validation-for="ImageURL" class="text-danger"></span>
+
     </div>
     <div>
         <label asp-for="DepartmentId"></label>
@@ -26,7 +32,13 @@
         <select asp-for="DepartmentId" class="form form-control" asp-items="deptOptions">
             <option value="0">--Select Dept--</option>
         </select>
+        <span asp-validation-for="DepartmentId" class="text-danger"></span>
+
     </div>
     <input type="submit" class="btn btn-success" value="Create" />
 </form>
 <a asp-action="Index" asp-controller="Employee">Back To List</a>
+<!-- client side validation script-->
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

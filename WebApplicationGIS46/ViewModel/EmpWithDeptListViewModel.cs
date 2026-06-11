@@ -15,6 +15,6 @@ namespace WebApplicationGIS46.ViewModel
         public string? ImageURL { get; set; }
         public int EmpSalary { get; set; }
         public int DepartmentId { get; set; }
-        public List<Department> DepartmentList { get; set; }
+        public List<Department>? DepartmentList { get; set; }
     }
 }

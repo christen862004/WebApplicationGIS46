@@ -12,6 +12,15 @@ namespace WebApplicationGIS46.Controllers
         {
             return View("Index", context.Employees.ToList());
         }
+        //Employee/CheckSalary? Salary = 11 &DepartmentId=1
+        public IActionResult CheckSalary(int Salary,int DepartmentId)
+        {
+            if (Salary > 7000)
+            {
+                return Json(true);
+            }
+            return Json("Salary Must be More Than 7000");
+        }
 
         #region NEw
         public IActionResult New()
@@ -23,10 +32,18 @@ namespace WebApplicationGIS46.Controllers
         [ValidateAntiForgeryToken]//request.key["_vertoo"]
         public IActionResult SaveNew(Employee empFromRequest)
         {
-            if(empFromRequest.Name != null&& empFromRequest.Salary>7000) {
-                context.Employees.Add(empFromRequest);
-                context.SaveChanges();
-                return RedirectToAction("Index", "Employee");
+            //if(empFromRequest.Name != null&& empFromRequest.Salary>7000) {
+            if (ModelState.IsValid==true)
+            {
+                try
+                {
+                    context.Employees.Add(empFromRequest);
+                    context.SaveChanges();
+                    return RedirectToAction("Index", "Employee");
+                }catch(Exception ex)
+                {
+                    ModelState.AddModelError(key: "anykey", errorMessage: ex.InnerException.Message);
+                }
             }
             ViewData["DeptList"] = context.Departments.ToList();
             return View("New", empFromRequest);
