@@ -1,16 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.SqlServer.Server;
 using WebApplicationGIS46.Models;
+using WebApplicationGIS46.Repository;
 using WebApplicationGIS46.ViewModel;
 
 namespace WebApplicationGIS46.Controllers
 {
     public class EmployeeController : Controller
     {
-        ITIContext  context=new ITIContext();
+        //ITIContext  context=new ITIContext();
+        IEmployeeRepo EmpRepo;
+        IDepartmentRepo DeptRepo;
+        public EmployeeController(IEmployeeRepo empRepo,IDepartmentRepo deptRepo)//ask constructor =>service Provider
+        {
+            EmpRepo = empRepo;// new EmployeeRepsitory();
+            DeptRepo = deptRepo;//new DepartmentRepository();
+        }
         public IActionResult Index()
         {
-            return View("Index", context.Employees.ToList());
+            return View("Index", EmpRepo.GetAll());
         }
         //Employee/CheckSalary? Salary = 11 &DepartmentId=1
         public IActionResult CheckSalary(int Salary,int DepartmentId)
@@ -25,7 +33,7 @@ namespace WebApplicationGIS46.Controllers
         #region NEw
         public IActionResult New()
         {
-            ViewData["DeptList"] = context.Departments.ToList();
+            ViewData["DeptList"] = DeptRepo.GetAll();
             return View("New");
         }
         [HttpPost]
@@ -37,15 +45,15 @@ namespace WebApplicationGIS46.Controllers
             {
                 try
                 {
-                    context.Employees.Add(empFromRequest);
-                    context.SaveChanges();
+                    EmpRepo.Add (empFromRequest);
+                    EmpRepo.Save();
                     return RedirectToAction("Index", "Employee");
                 }catch(Exception ex)
                 {
                     ModelState.AddModelError(key: "anykey", errorMessage: ex.InnerException.Message);
                 }
             }
-            ViewData["DeptList"] = context.Departments.ToList();
+            ViewData["DeptList"] = DeptRepo.GetAll();
             return View("New", empFromRequest);
         }
         #endregion
@@ -55,8 +63,8 @@ namespace WebApplicationGIS46.Controllers
         {
             //collect
             //get employee
-            Employee empModel = context.Employees.FirstOrDefault(e => e.Id == id);
-            List<Department> departmentList = context.Departments.ToList();
+            Employee empModel = EmpRepo.GetById( id);
+            List<Department> departmentList = DeptRepo.GetAll();
             if(empModel == null)
             {
                 return NotFound();
@@ -81,17 +89,20 @@ namespace WebApplicationGIS46.Controllers
         {
             if(empFromReq.EmpName != null) {
                 //get old refernce fro database (track)
-                Employee empFromDB= context.Employees.FirstOrDefault(e=>e.Id==empFromReq.Id);
+                Employee empFromDB = new();//context.Employees.FirstOrDefault(e=>e.Id==empFromReq.Id);
                 //map
+                empFromDB.Id = empFromReq.Id;
                 empFromDB.Name = empFromReq.EmpName;
                 empFromDB.Salary = empFromReq.EmpSalary;
                 empFromDB.ImageURL = empFromReq.ImageURL;
                 empFromDB.DepartmentId = empFromReq.DepartmentId;
+                EmpRepo.Update(empFromDB);
                 //save change
-                context.SaveChanges();
+                // context.SaveChanges();
+                EmpRepo.Save();
                 return RedirectToAction(actionName: "Index",controllerName:"Employee");
             }
-            List<Department> departmentList = context.Departments.ToList();
+            List<Department> departmentList = DeptRepo.GetAll();
             empFromReq.DepartmentList=departmentList;//refill non coming property
 
             return View("Edit", empFromReq);//{name=,empsa=200,deplartment=6}
@@ -102,7 +113,7 @@ namespace WebApplicationGIS46.Controllers
         public IActionResult Details(int id,string name)
         {
             string msg = "hello";
-            List<string> DeptList=context.Departments.Select(x => x.Name).ToList();
+            List<string> DeptList=DeptRepo.GetAll().Select(d=>d.Name).ToList();
             int temp = 10;
             //Fill Write
             ViewData["MSG"] = msg;
@@ -111,17 +122,17 @@ namespace WebApplicationGIS46.Controllers
             ViewBag.color = "red";
             ViewData["color123"] = "blue";//color blue or red or exception
 
-            Employee emp= context.Employees.FirstOrDefault(e => e.Id == id);
+            Employee emp= EmpRepo.GetById( id);
             return View("Details",emp);
         }
         public IActionResult DetailsVM(int id)
         {
             //Collect
             string msg = "hello";
-            List<string> DeptList = context.Departments.Select(x => x.Name).ToList();
+            List<string> DeptList = DeptRepo.GetAll().Select(x => x.Name).ToList();
             int temp = 10;
 
-            Employee emp = context.Employees.FirstOrDefault(e => e.Id == id);
+            Employee emp = EmpRepo.GetById( id);
             //DEcalre ViewModel  -mapping
             EmpWithMsgTempDeptListColorViewModel empVM = new () { 
                 EmpId=emp.Id,

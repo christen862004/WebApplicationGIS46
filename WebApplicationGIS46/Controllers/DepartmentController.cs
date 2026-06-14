@@ -1,14 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApplicationGIS46.Models;
+using WebApplicationGIS46.Repository;
 
 namespace WebApplicationGIS46.Controllers
 {
     public class DepartmentController : Controller
     {
-        ITIContext context = new ITIContext();
+        // ITIContext context = new ITIContext();
+        IDepartmentRepo DEptRepo;
+        public DepartmentController(IDepartmentRepo deptRepo)//ask about depency DIP +IOC +DI
+        {
+            DEptRepo = deptRepo;// new DepartmentRepository();
+        }
         public IActionResult Index()
         {
-            List<Department> deptList= context.Departments.ToList();
+            List<Department> deptList= DEptRepo.GetAll();
             return View("Index",deptList);
         }
         #region NEw
@@ -24,8 +30,8 @@ namespace WebApplicationGIS46.Controllers
            // if (Request.Method == "POST"){ }
             if (deptFromReq.Name != null)
             {
-                context.Departments.Add(deptFromReq);
-                context.SaveChanges();
+                DEptRepo.Add(deptFromReq);
+                DEptRepo.Save();
                 return RedirectToAction(actionName:"Index",controllerName:"Department") ;
             }
             return View(viewName:"New",model:deptFromReq);//new ,model =>departmentr
