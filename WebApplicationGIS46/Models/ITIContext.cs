@@ -11,14 +11,18 @@ namespace WebApplicationGIS46.Models
         //Server NAme "."
         //Authantication
         //Databse name
-        public ITIContext():base()
-        {
+        //public ITIContext():base()
+        //{
             
-        }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //}
+        public ITIContext(DbContextOptions<ITIContext> options) : base(options)
         {
-            optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=GIS_MVC_46;Integrated Security=True;Encrypt=False;Trust Server Certificate=True");//connectionstring
-            base.OnConfiguring(optionsBuilder);
+
         }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=GIS_MVC_46;Integrated Security=True;Encrypt=False;Trust Server Certificate=True");//connectionstring
+        //    base.OnConfiguring(optionsBuilder);
+        //}
     }
 }

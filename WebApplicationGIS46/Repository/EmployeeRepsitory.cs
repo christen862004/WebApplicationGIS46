@@ -6,9 +6,9 @@ namespace WebApplicationGIS46.Repository
     {
         //CRUD (Create -Read - Update -Delete)
         ITIContext context;
-        public EmployeeRepsitory()
+        public EmployeeRepsitory(ITIContext _ctx)
         {
-            context = new ITIContext();
+            context = _ctx;// new ITIContext();//craeaet context or inject
         }
         public void Add(Employee entity)
         {

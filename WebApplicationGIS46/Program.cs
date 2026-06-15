@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using WebApplicationGIS46.Models;
 using WebApplicationGIS46.Repository;
 using WebApplicationGIS46.ViewModel;
 
@@ -13,27 +16,61 @@ namespace WebApplicationGIS46
             //1) built in and already register
             //2) built in and need to register
             builder.Services.AddControllersWithViews();
+            builder.Services.AddSession(options =>
+                options.IdleTimeout = TimeSpan.FromMinutes(30)); ;//registre sessives using defaiutl
+            builder.Services.AddDbContext<ITIContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("CS"));//connectionstring
+
+            });//register ITIContext,dbContextOption
+
+
             //3) Custom Service ,and need to register
             builder.Services.AddScoped<IEmployeeRepo, EmployeeRepsitory>();
             builder.Services.AddScoped<IDepartmentRepo, DepartmentRepository>();
-
+           // builder.Services.AddSingleton<IService, Service>();//create one object to all request 1
+           // builder.Services.AddTransient<IService, Service>();//create new object wiach inject  4
+            builder.Services.AddScoped<IService, Service>();//create new object with each request  2
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.//Middlewares
+            #region inline middlware "delcare degleg (custom)
+            //app.Use(async (httpcontext, nextrMidleware) => {
+            //    await httpcontext.Response.WriteAsync("1- Middleware 1\n");//1
+            //    await nextrMidleware.Invoke();//2<=
+            //    await httpcontext.Response.WriteAsync("1-1 Middleware 1-1\n");//3
+            //});
+            //app.Use(async (httpcontext, nextrMidleware) => {
+            //    await httpcontext.Response.WriteAsync("2- Middleware 2\n");//4
+            //    await nextrMidleware.Invoke();//5
+            //    await httpcontext.Response.WriteAsync("2-2 Middleware 2-2\n");//6
+            //});
+            //app.Run(async httpcontext =>
+            //{
+            //   await  httpcontext.Response.WriteAsync("3- Terminate\n");//7
+            //});
+            //1,2,4,5,7,6,3
+            #endregion
+            //2) Component middlware (built in)
+            #region defult pipline
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-            app.UseStaticFiles();
+
+            app.UseStaticFiles();//try to handel request from wwwroot folder 
 
             app.UseRouting();
 
             app.UseAuthorization();
 
+            app.UseSession();//creat esession wrote , read ==>use some servbices ==>need to register
+
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
-
+            #endregion
             app.Run();
         }
     }

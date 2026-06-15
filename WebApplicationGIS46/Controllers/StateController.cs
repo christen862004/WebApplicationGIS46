@@ -1,0 +1,52 @@
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace WebApplicationGIS46.Controllers
+{
+    public class StateController : Controller
+    {
+        public StateController()
+        {
+            
+        }
+        #region Session Store
+        public IActionResult SetSession(string name,int age)
+        {
+            //logic db ,service ...
+            //state
+            HttpContext.Session.SetString("EmpName", name);
+            HttpContext.Session.SetInt32("Age", age);
+            return Content("Session Store Success");
+        }
+        public IActionResult Getsession()
+        {
+            //logic
+            string n = HttpContext.Session.GetString("EmpName");
+            int? a =  HttpContext.Session.GetInt32("Age");
+            return Content($"Name={n}\tAge={a}");
+        }
+        #endregion
+
+        #region Cookie
+        public IActionResult SetCookie(string name,int age) {
+            //logic 
+            //obj ==>serial tro json =>string (need to search)
+            //need write cookie send client (response)
+            //session cookie
+            HttpContext.Response.Cookies.Append("EmpName", name);//expired when sesssion end
+            //Presisiten cookie (cookie with expiration)
+            CookieOptions options=new CookieOptions();
+            options.Expires = DateTimeOffset.Now.AddDays(1);
+           
+            HttpContext.Response.Cookies.Append("Age", age.ToString(),options);
+            return Content("Cookie Save Success");
+        }
+        public IActionResult GetCookie()
+        {
+            string n = HttpContext.Request.Cookies["EmpName"];
+            string a = HttpContext.Request.Cookies["Age"];
+            return Content($"name={n}\t age={a}");
+
+        }
+        #endregion
+    }
+}

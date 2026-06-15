@@ -11,7 +11,7 @@ namespace WebApplicationGIS46.Models
             string? name = value.ToString();
             Employee? empFromRequest= validationContext.ObjectInstance as Employee;
 
-            ITIContext context = new ITIContext();
+            ITIContext context = validationContext.GetRequiredService<ITIContext>();// new ITIContext();
             Employee? empFromDB=context.Employees
                 .FirstOrDefault(e => e.Name == name && e.DepartmentId == empFromRequest.DepartmentId);//Unique per department
             if(empFromDB == null) {
