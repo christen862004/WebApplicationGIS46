@@ -1,13 +1,33 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using WebApplicationGIS46.Models;
 
 namespace WebApplicationGIS46.Controllers
 {
+    //  [ErrorHandel]
+    //[Authorize]
     public class StateController : Controller
     {
+
+        //15  14 endpoint [autho]
         public StateController()
         {
             
         }
+
+        #region Filtter
+        [ErrorHandel]
+       // [AllowAnonymous]//??
+        public ActionResult m1() {
+            throw new Exception("Some Expection thorw");
+        }
+       // [ErrorHandel]
+
+        public ActionResult m2()
+        {
+            throw new Exception("Some Expection thorw");
+        }
+        #endregion
         #region Session Store
         public IActionResult SetSession(string name,int age)
         {

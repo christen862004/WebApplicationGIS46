@@ -15,7 +15,12 @@ namespace WebApplicationGIS46
             // Add services to the container.
             //1) built in and already register
             //2) built in and need to register
+            //builder.Services.AddControllersWithViews(options=>options.Filters.Add(new ErrorHandelAttribute()));
             builder.Services.AddControllersWithViews();
+
+
+
+
             builder.Services.AddSession(options =>
                 options.IdleTimeout = TimeSpan.FromMinutes(30)); ;//registre sessives using defaiutl
             builder.Services.AddDbContext<ITIContext>(options =>
@@ -24,7 +29,7 @@ namespace WebApplicationGIS46
 
             });//register ITIContext,dbContextOption
 
-
+        
             //3) Custom Service ,and need to register
             builder.Services.AddScoped<IEmployeeRepo, EmployeeRepsitory>();
             builder.Services.AddScoped<IDepartmentRepo, DepartmentRepository>();
@@ -58,18 +63,38 @@ namespace WebApplicationGIS46
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
+            
             app.UseStaticFiles();//try to handel request from wwwroot folder 
 
-            app.UseRouting();
+            app.UseRouting();//security MApping 
 
             app.UseAuthorization();
 
             app.UseSession();//creat esession wrote , read ==>use some servbices ==>need to register
 
+            #region Custom Route 1)Naming Convension route - route constarin - default route parameter
+            //app.MapControllerRoute(name: "Rout1", 
+            //    pattern: "{controller=Home}/{action=Index}/{id?}");
+            //r1/Method1
+            //r1/Method2
+
+
+            //app.MapControllerRoute(name: "emp1",
+            //    pattern: "e1/{action}", defaults: new { controller = "Employee", action = "Index" });
+
+
+            //app.MapControllerRoute(name: "Rout1",
+            //    pattern: "r1/{age:int:range(20,60)}/{name?}",
+            //    defaults: new { controller = "Route", action = "Method1" });
+
+            //app.MapControllerRoute(name: "Rout2",
+            //    pattern: "r2",
+            //    defaults: new { controller = "Route", action = "Method2" });
+            #endregion
+            //the last route
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Home}/{action=Index}/{id?}");//staff (decalre ,execute)//Employee/Index
             #endregion
             app.Run();
         }

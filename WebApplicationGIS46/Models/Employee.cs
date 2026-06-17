@@ -19,6 +19,7 @@ namespace WebApplicationGIS46.Models
         //[Required]
         //[MoreThan(6000,ErrorMessage ="Salary must be more 6000")]
         [Remote("CheckSalary","Employee",AdditionalFields = "DepartmentId")]//get "/Employee/CheckSalary?Salary=11"
+        
         public int Salary { get; set; }
         [Display(Name = "Department")]
         public int DepartmentId { get; set; }
