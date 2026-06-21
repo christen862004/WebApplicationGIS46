@@ -15,6 +15,7 @@ namespace WebApplicationGIS46.Controllers
         {
             if (User.Identity.IsAuthenticated == true)
             {  
+                //User.IsInRole("Admin")
                 string name = User.Identity.Name;
                 Claim IdClaim= User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
                 Claim AddressClaim = User.Claims.FirstOrDefault(c => c.Type == "Address");

@@ -41,9 +41,11 @@ namespace WebApplicationGIS46.Controllers
                 IdentityResult result=await  userManager.CreateAsync(appUser,userFromRequest.Password);
                 if (result.Succeeded)
                 {
+                    //assign user to role admin
+                    await userManager.AddToRoleAsync(appUser, "Admin");
                     //creat cookie
                     //create cookie (id,username,email? ,roler?)
-                    await signInManager.SignInAsync(appUser, false);
+                    await signInManager.SignInAsync(appUser, false);//id,name,role,email?
                     return RedirectToAction("Index", "employee");
                 }
                 //send error to view

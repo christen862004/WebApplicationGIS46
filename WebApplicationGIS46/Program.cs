@@ -25,7 +25,8 @@ namespace WebApplicationGIS46
                 options.UseSqlServer(builder.Configuration.GetConnectionString("CS"));//connectionstring
 
             });//register ITIContext,dbContextOption
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(optios =>
+            //web api authorize token
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(optios => //identity
             {
                 optios.Password.RequireUppercase = true;
                 optios.Password.RequiredLength = 4;
