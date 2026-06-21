@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using WebApplicationGIS46.Models;
@@ -17,10 +18,6 @@ namespace WebApplicationGIS46
             //2) built in and need to register
             //builder.Services.AddControllersWithViews(options=>options.Filters.Add(new ErrorHandelAttribute()));
             builder.Services.AddControllersWithViews();
-
-
-
-
             builder.Services.AddSession(options =>
                 options.IdleTimeout = TimeSpan.FromMinutes(30)); ;//registre sessives using defaiutl
             builder.Services.AddDbContext<ITIContext>(options =>
@@ -28,6 +25,31 @@ namespace WebApplicationGIS46
                 options.UseSqlServer(builder.Configuration.GetConnectionString("CS"));//connectionstring
 
             });//register ITIContext,dbContextOption
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(optios =>
+            {
+                optios.Password.RequireUppercase = true;
+                optios.Password.RequiredLength = 4;
+                optios.Password.RequireNonAlphanumeric = false;
+                optios.Password.RequireDigit = false;
+            }).AddEntityFrameworkStores<ITIContext>();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         
             //3) Custom Service ,and need to register

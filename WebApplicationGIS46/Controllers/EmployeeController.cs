@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.SqlServer.Server;
 using WebApplicationGIS46.Models;
 using WebApplicationGIS46.Repository;
@@ -16,6 +17,7 @@ namespace WebApplicationGIS46.Controllers
             EmpRepo = empRepo;// new EmployeeRepsitory();
             DeptRepo = deptRepo;//new DepartmentRepository();
         }
+        [Authorize]//check cookie identity
         public IActionResult Index()
         {
             return View("Index", EmpRepo.GetAll());

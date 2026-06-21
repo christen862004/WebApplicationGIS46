@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using WebApplicationGIS46.Models;
 
 namespace WebApplicationGIS46.Controllers
@@ -8,6 +9,24 @@ namespace WebApplicationGIS46.Controllers
     //[Authorize]
     public class StateController : Controller
     {
+
+      //  [Authorize]//cookie
+        public IActionResult Welcome()
+        {
+            if (User.Identity.IsAuthenticated == true)
+            {  
+                string name = User.Identity.Name;
+                Claim IdClaim= User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+                Claim AddressClaim = User.Claims.FirstOrDefault(c => c.Type == "Address");
+                return Content($"Welcome {name} \t id={IdClaim.Value}\t Address={AddressClaim.Value}");
+            }
+            //authorize welcome + name
+            //gust Welcome gust
+            return Content("Welcome Gust");
+        }
+
+
+
 
         //15  14 endpoint [autho]
         public StateController()
